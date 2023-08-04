@@ -55,8 +55,7 @@ def browser():
 # input_line.send_keys('Тензор')
 #
 # #todo Изменить xpath value
-# li = driver.find_element(By.XPATH,
-#                          value="//ul[@class='mini-suggest__popup-content']/li[@class='mini-suggest__item']")
+# li = driver.find_element()
 # print(li)
 
 
