@@ -1,27 +1,15 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from .base_page import BasePage
 
-
-class SearchPage:
-    SEARCH_LINE = (By.ID, 'text')
+class SearchPage(BasePage):
     SUGGESTIONS = (By.XPATH, "//ul[@class='mini-suggest__popup-content']/li")
+    FIRST_RESULT_LINK = (By.XPATH, "(//li[contains(@class,'serp-item')]//a)[2]")
+
     def __init__(self, driver):
-        self.driver = driver
-
-
-    def find_element(self,locator,time=10):
-        return WebDriverWait(self.driver, time).until(EC.presence_of_element_located(locator),
-                                               message=f"Can't find element by locator {locator}")
-    def find_elements(self,locator,time=10):
-        return WebDriverWait(self.driver, time).until(EC.presence_of_all_elements_located(locator),
-                                               message=f"Can't find element by locator {locator}")
-
-    def find_search_line(self):
-        return self.find_element(self.SEARCH_LINE)
+        super().__init__(driver)
 
     def find_suggestions(self):
         return self.find_elements(self.SUGGESTIONS)
 
-    # def input_phrase(self):
-    #     self.
+    def find_first_search_result(self):
+        return self.find_element(self.FIRST_RESULT_LINK)
