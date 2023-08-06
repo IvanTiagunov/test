@@ -3,5 +3,5 @@ venv/
 /chromedriver.exe
 /.pytest_cache/
 /.env
-*/__pycache__/
+**/__pycache__
 /yandexdriver.exe
