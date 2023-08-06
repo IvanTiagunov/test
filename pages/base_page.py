@@ -17,5 +17,11 @@ class BasePage:
     def find_elements(self, locator, time=10):
         return WebDriverWait(self.driver, time).until(EC.presence_of_all_elements_located(locator),
                                                       message=f"Can't find element by locator {locator}")
+
+    def do_not_find_element(self, locator, time=10):
+        return WebDriverWait(self.driver, time).until_not(EC.presence_of_element_located(locator),
+                                               message=f"Can find element by locator {locator}")
+
     def find_search_line(self):
         return self.find_element(self.SEARCH_LINE)
+
