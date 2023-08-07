@@ -1,66 +1,49 @@
 import logging
 import time
+
 from pages.yandex_images import ImagesPage
+
 logger = logging.getLogger(__name__)
 
-# Todo заменить все time.sleep() методы на ожидание загрузки страницы.
-def test_images(browser):
-    # нажать на поисковую строку центре страницы
-    page = ImagesPage(browser)
-    time.sleep(6)
 
-    search_line = page.find_search_line()
-    search_line.click()
-    # нажать на иконку меню
+def test_images(browser):
+    # Получение главной страницы
+    page = ImagesPage(browser)
+    # Клик по строке поиска для отображения кнопки меню
+    page.find_search_line()
+    # Проверка присутствия кнопки меню на странице
     menu_button = page.get_menu()
     assert menu_button.is_displayed()
+
+    # Переход в раздел "Картинки"
     menu_button.click()
-
-    image_button = page.get_image_button()
-
-    image_button.click()
-
-    time.sleep(3)
-    # переключаем страницу
+    page.click_image_button()
+    # Проверка адреса страницы
     page.switch_the_page()
-
     assert page.driver.current_url == "https://ya.ru/images/"
 
-    category = page.get_first_category()
-    category_name = category.get_attribute('data-grid-text')
+    # Переход в первую отображаемую категорию
+    category_name = page.click_and_get_first_category_name()
+    # Проверка отображения названия категории в поле поиска
+    search_line_value = page.get_search_line_value_after_image_choose()
+    assert category_name == search_line_value
 
-    category.click()
-
-    line = page.get_search_line_after_image_choose()
-
-    assert category_name == line.get_attribute('value')
-
-    small_image = page.get_first_small_image()
-    small_image.click()
-
-    first_big_image = page.get_big_image()
-
-    time.sleep(2)
-
+    # Переход к первой картинке в выбранной категории
+    page.click_first_small_image()
+    # Получение ссылки на первую картинку
+    url_first_big_image = page.get_big_image_src()
+    # Проверка корретной загрузки фото на странице
     no_error = page.get_no_error_message_on_image_loading()
-
     assert no_error
 
-    url_first_big_image = first_big_image.get_attribute('src')
-
-    next_button = page.get_next_image_button()
-    next_button.click()
-
-    time.sleep(2)
-
-    url_second_big_image = page.get_big_image().get_attribute('src')
-
+    # Переход к следующей картинке
+    page.click_next_image_button()
+    # Проверка смены картинки
+    url_second_big_image = page.get_big_image_src()
     assert url_first_big_image != url_second_big_image
 
-    previous_button = page.get_previous_image_button()
-    previous_button.click()
-
-    url_third_big_image = page.get_big_image().get_attribute('src')
-
+    # Переход к предыдущей картинке
+    page.click_previous_image_button()
+    url_third_big_image = page.get_big_image_src()
+    # Проверка первой картинки. Она должна остаться той же
     assert url_third_big_image == url_first_big_image
-

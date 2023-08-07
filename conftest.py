@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -9,11 +11,12 @@ config = dotenv_values(".env")
 
 @pytest.fixture(scope="function")
 def browser():
-    # Создаем экземпляр веб-драйвера
+    # Настраиваем путь до веб-драйвера
     driver_file = config.get('PATH_TO_DRIVER')
     service = Service(executable_path=driver_file)
     options = Options()
-    options.add_experimental_option("detach", True)
+    #options.add_experimental_option("detach", True)
+    options.add_argument("--start-maximized")
     driver = webdriver.Chrome(service=service, options=options)
 
     # Устанавливаем время неявного ожидания элементов на странице
@@ -25,3 +28,8 @@ def browser():
     # Закрываем веб-драйвер после завершения каждого теста
     driver.quit()
 
+
+@pytest.fixture(autouse=True)
+def slow_down_tests():
+    yield
+    time.sleep(1)

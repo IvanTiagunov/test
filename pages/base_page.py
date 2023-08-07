@@ -8,6 +8,7 @@ class BasePage:
 
     def __init__(self, driver):
         self.driver = driver
+        # Переход на главную страницу
         self.driver.get("https://ya.ru")
 
     def find_element(self, locator, time=10):
@@ -20,8 +21,21 @@ class BasePage:
 
     def do_not_find_element(self, locator, time=10):
         return WebDriverWait(self.driver, time).until_not(EC.presence_of_element_located(locator),
-                                               message=f"Can find element by locator {locator}")
+                                                      message=f"Can find element by locator {locator}")
 
     def find_search_line(self):
-        return self.find_element(self.SEARCH_LINE)
+        elem = self.find_element(self.SEARCH_LINE)
+        elem.click()
+        return elem
 
+
+    def find_clickable(self, locator):
+        wait = WebDriverWait(self.driver, 10)
+        element = wait.until(EC.element_to_be_clickable(locator))
+        return element
+
+    def find_clickable_and_click(self, locator):
+        wait = WebDriverWait(self.driver, 10)
+        element = wait.until(EC.element_to_be_clickable(locator))
+        element.click()
+        return element

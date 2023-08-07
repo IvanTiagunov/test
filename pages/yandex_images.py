@@ -1,13 +1,13 @@
+import logging
 import time
 
 import requests
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
-
 from .base_page import BasePage
 
+logger = logging.getLogger(__name__)
 
 
 class ImagesPage(BasePage):
@@ -21,22 +21,24 @@ class ImagesPage(BasePage):
     NEXT_IMAGE_BUTTON = (By.XPATH, "(//i[@class='CircleButton-Icon'])[4]")
     PREV_IMAGE_BUTTON = (By.XPATH, "(//i[@class='CircleButton-Icon'])[1]")
 
-    # SECOND_BIG_IMAGE =
     def __init__(self, driver):
         super().__init__(driver)
         self.original_page_id = driver.current_window_handle
 
     def get_menu(self):
-        return self.find_element(self.MENU_BUTTON)
+        return self.find_clickable(self.MENU_BUTTON)
 
-    def get_image_button(self):
-        return self.find_element(self.IMAGES_BUTTON)
+    def click_image_button(self):
+        return self.find_clickable_and_click(self.IMAGES_BUTTON)
 
-    def get_first_category(self):
-        return self.find_element(self.FIRST_CATEGORY_BUTTON)
+    def click_and_get_first_category_name(self):
+        category = self.find_element(self.FIRST_CATEGORY_BUTTON)
+        category_name = category.get_attribute('data-grid-text')
+        category.click()
+        return category_name
 
-    def get_search_line_after_image_choose(self):
-        return self.find_element(self.SEARCH_LINE_AFTER_IMAGE_CHOOSE)
+    def get_search_line_value_after_image_choose(self):
+        return self.find_element(self.SEARCH_LINE_AFTER_IMAGE_CHOOSE).get_attribute('value')
 
     def switch_the_page(self):
         wait = WebDriverWait(self.driver, 10)
@@ -46,17 +48,18 @@ class ImagesPage(BasePage):
                 self.driver.switch_to.window(window_handle)
                 break
 
-    def get_first_small_image(self):
-        return self.find_element(self.FIRST_SMALL_IMAGE)
+    def click_first_small_image(self):
+        return self.find_clickable_and_click(self.FIRST_SMALL_IMAGE)
 
-    def get_big_image(self):
-        return self.find_element(self.BIG_IMAGE)
+    def get_big_image_src(self):
+        time.sleep(2)
+        return self.find_element(self.BIG_IMAGE).get_attribute('src')
 
     def get_no_error_message_on_image_loading(self):
         return self.do_not_find_element(self.ERROR_MESSAGE_ON_IMAGE)
 
-    def get_next_image_button(self):
-        return self.find_element(self.NEXT_IMAGE_BUTTON)
+    def click_next_image_button(self):
+        return self.find_clickable_and_click(self.NEXT_IMAGE_BUTTON)
 
-    def get_previous_image_button(self):
-        return self.find_element(self.PREV_IMAGE_BUTTON)
+    def click_previous_image_button(self):
+        return self.find_clickable_and_click(self.PREV_IMAGE_BUTTON)

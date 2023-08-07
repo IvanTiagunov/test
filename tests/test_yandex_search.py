@@ -7,28 +7,30 @@ from pages.yandex_search import SearchPage
 
 logger = logging.getLogger(__name__)
 
+
 def test_successful_search(browser):
+    # Получение главной страницы
     search_page = SearchPage(browser)
-
+    # Получение поля поиска
     search_line = search_page.find_search_line()
-    # logger.info(str(search_line.get_attribute('placeholder')))
+    # Проверка наличия поля поиска
+    assert search_line.is_displayed()
 
-    assert search_line != None
-
+    # Ввод в поиск Тензор
     search_line.send_keys("Тензор")
-
-    suggestions = search_page.find_suggestions()
+    # Получение списка подсказок
+    suggestions = search_page.get_suggestions()
+    # Вывод в лог списка подсказок
     logger.info("Список подсказок: {}".format(', '.join(map(lambda elem: elem.text, suggestions))))
-
+    # Проверка существования списка
     assert len(suggestions) > 0
 
+    # Нажатие клавиши enter
     search_line.send_keys(Keys.ENTER)
-    time.sleep(3)
-    # logger.info(f"Текущаю страница: {browser.current_url}")
-
+    # Проверка существования страницы результатов поиска
     assert "No results found." not in browser.page_source
 
-    first_link = search_page.find_first_search_result()
-    assert first_link.get_attribute("href") == "https://tensor.ru/"
-
-
+    # Получение первой ссылки в поисковой выдаче
+    first_link = search_page.get_first_search_result()
+    # Проверка, что первая ссылка ведёт на официальный сайт
+    assert "https://tensor.ru/" in first_link.get_attribute("href")

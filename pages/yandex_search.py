@@ -8,8 +8,8 @@ class SearchPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-    def find_suggestions(self):
+    def get_suggestions(self):
         return self.find_elements(self.SUGGESTIONS)
 
-    def find_first_search_result(self):
+    def get_first_search_result(self):
         return self.find_element(self.FIRST_RESULT_LINK)
