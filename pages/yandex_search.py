@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
 
+
 class SearchPage(BasePage):
     SUGGESTIONS = (By.XPATH, "//ul[@class='mini-suggest__popup-content']/li")
     FIRST_RESULT_LINK = (By.XPATH, "(//li[contains(@class,'serp-item')]//a)[2]")

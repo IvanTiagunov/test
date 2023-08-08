@@ -34,7 +34,6 @@ def test_images(browser):
     # Проверка корретной загрузки фото на странице
     assert page.check_big_image_exists()
 
-
     # Переход к следующей картинке
     page.click_next_image_button()
     # Проверка смены картинки
