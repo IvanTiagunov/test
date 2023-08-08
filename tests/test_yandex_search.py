@@ -1,8 +1,5 @@
 import logging
-import time
-
 from selenium.webdriver import Keys
-
 from pages.yandex_search import SearchPage
 
 logger = logging.getLogger(__name__)

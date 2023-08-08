@@ -1,11 +1,10 @@
 import logging
 import time
-
-import requests
+from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from .base_page import BasePage
+from pages.base_page import BasePage
 
 logger = logging.getLogger(__name__)
 
@@ -55,8 +54,12 @@ class ImagesPage(BasePage):
         time.sleep(2)
         return self.find_element(self.BIG_IMAGE).get_attribute('src')
 
-    def get_no_error_message_on_image_loading(self):
-        return self.do_not_find_element(self.ERROR_MESSAGE_ON_IMAGE)
+    def check_big_image_exists(self):
+        try:
+            self.find_element(self.BIG_IMAGE)
+        except NoSuchElementException:
+            return False
+        return True
 
     def click_next_image_button(self):
         return self.find_clickable_and_click(self.NEXT_IMAGE_BUTTON)

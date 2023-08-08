@@ -1,5 +1,4 @@
 import logging
-import time
 
 from pages.yandex_images import ImagesPage
 
@@ -33,8 +32,8 @@ def test_images(browser):
     # Получение ссылки на первую картинку
     url_first_big_image = page.get_big_image_src()
     # Проверка корретной загрузки фото на странице
-    no_error = page.get_no_error_message_on_image_loading()
-    assert no_error
+    assert page.check_big_image_exists()
+
 
     # Переход к следующей картинке
     page.click_next_image_button()

@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from .base_page import BasePage
+from pages.base_page import BasePage
 
 class SearchPage(BasePage):
     SUGGESTIONS = (By.XPATH, "//ul[@class='mini-suggest__popup-content']/li")
